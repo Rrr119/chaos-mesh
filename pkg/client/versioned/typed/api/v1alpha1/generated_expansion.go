@@ -42,6 +42,8 @@ type PodIOChaosExpansion interface{}
 
 type PodNetworkChaosExpansion interface{}
 
+type SecurityChaosExpansion interface{}
+
 type StressChaosExpansion interface{}
 
 type TimeChaosExpansion interface{}

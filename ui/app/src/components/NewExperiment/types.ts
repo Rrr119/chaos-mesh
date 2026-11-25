@@ -174,6 +174,7 @@ export interface ExperimentType {
   TimeChaos: Time
   PhysicalMachineChaos?: unknown
   BlockChaos?: unknown
+  SecurityChaos?: unknown
 }
 
 export type ExperimentKind = keyof ExperimentType

@@ -200,6 +200,8 @@ func convertInnerObjectToExperiment(obj v1alpha1.InnerObject) (*core.Experiment,
 		experiment.Action = string(chaos.Spec.Action)
 	case *v1alpha1.BlockChaos:
 		experiment.Action = string(chaos.Spec.Action)
+	case *v1alpha1.SecurityChaos:
+		experiment.Action = string(chaos.Spec.Action)
 	default:
 		return nil, errors.New("unsupported chaos type " + experiment.Kind)
 	}

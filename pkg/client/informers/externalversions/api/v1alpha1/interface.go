@@ -48,6 +48,8 @@ type Interface interface {
 	Podiochaos() TypedPodIOChaosInformer
 	// Podnetworkchaos returns a PodNetworkChaosInformer.
 	Podnetworkchaos() TypedPodNetworkChaosInformer
+	// Securitychaos returns a SecurityChaosInformer.
+	Securitychaos() TypedSecurityChaosInformer
 	// Stresschaos returns a StressChaosInformer.
 	Stresschaos() TypedStressChaosInformer
 	// Timechaos returns a TimeChaosInformer.
@@ -128,6 +130,11 @@ func (v *version) Podiochaos() TypedPodIOChaosInformer {
 // Podnetworkchaos returns a TypedPodNetworkChaosInformer.
 func (v *version) Podnetworkchaos() TypedPodNetworkChaosInformer {
 	return &podNetworkChaosInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// Securitychaos returns a TypedSecurityChaosInformer.
+func (v *version) Securitychaos() TypedSecurityChaosInformer {
+	return &securityChaosInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
 // Stresschaos returns a TypedStressChaosInformer.

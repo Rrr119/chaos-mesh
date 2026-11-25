@@ -779,6 +779,7 @@ const data: Record<Kind, Definition> = {
       },
     ],
   },
+  SecurityChaos: {},
   // Stress Test
   StressChaos: {
     spec: {

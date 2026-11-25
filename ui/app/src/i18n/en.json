@@ -103,6 +103,9 @@
       "pod": {
         "title": "Pod Fault"
       },
+      "security": {
+        "title": "Security Fault"
+      },
       "process": {
         "title": "Process interruption"
       },

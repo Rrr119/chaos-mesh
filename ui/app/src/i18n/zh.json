@@ -103,6 +103,9 @@
       "pod": {
         "title": "Pod 故障"
       },
+      "security": {
+        "title": "安全故障"
+      },
       "process": {
         "title": "进程中断"
       },

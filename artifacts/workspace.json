@@ -1,0 +1,17 @@
+{
+  "root": "/home/dev/feedback/uid36823",
+  "B": "/home/dev/feedback/uid36823",
+  "sha": "c3e2e0c6a7853f7dbfe8733ecdf6ab5ea932b587",
+  "wslDistro": "Ubuntu-26.04",
+  "source": {
+    "owner": "chaos-mesh",
+    "repo": "chaos-mesh",
+    "sha": "c3e2e0c6a7853f7dbfe8733ecdf6ab5ea932b587"
+  },
+  "fork": {
+    "owner": "Rrr119",
+    "repo": "chaos-mesh",
+    "cloneUrl": "https://github.com/Rrr119/chaos-mesh.git"
+  },
+  "at": "2026-11-25T02:43:30.247Z"
+}

@@ -673,6 +673,7 @@ webhook:
     - workflow
     - httpchaos
     - blockchaos
+    - securitychaos
     - physicalmachinechaos
     - physicalmachine
     - statuscheck

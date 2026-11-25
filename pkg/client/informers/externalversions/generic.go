@@ -77,6 +77,8 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Api().V1alpha1().Podiochaos().Informer()}, nil
 	case v1alpha1.SchemeGroupVersion.WithResource("podnetworkchaos"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Api().V1alpha1().Podnetworkchaos().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("securitychaos"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Api().V1alpha1().Securitychaos().Informer()}, nil
 	case v1alpha1.SchemeGroupVersion.WithResource("stresschaos"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Api().V1alpha1().Stresschaos().Informer()}, nil
 	case v1alpha1.SchemeGroupVersion.WithResource("timechaos"):

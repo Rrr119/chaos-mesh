@@ -114,6 +114,8 @@ func (r *ScheduleCollector) createOrUpdateSchedule(ctx context.Context, req ctrl
 		sch.Action = string(schedule.Spec.ScheduleItem.AzureChaos.Action)
 	case v1alpha1.ScheduleTypeBlockChaos:
 		sch.Action = string(schedule.Spec.ScheduleItem.BlockChaos.Action)
+	case v1alpha1.ScheduleTypeSecurityChaos:
+		sch.Action = string(schedule.Spec.ScheduleItem.SecurityChaos.Action)
 	case v1alpha1.ScheduleTypeTimeChaos, v1alpha1.ScheduleTypeKernelChaos, v1alpha1.ScheduleTypeStressChaos, v1alpha1.ScheduleTypeHTTPChaos, v1alpha1.ScheduleTypeWorkflow:
 		sch.Action = ""
 	default:

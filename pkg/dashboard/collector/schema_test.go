@@ -48,6 +48,7 @@ var collectorKinds = []struct{ kind, field, action, spec string }{
 	{"NetworkChaos", "networkChaos", "delay", `{"action":"delay","delay":{"latency":"1ms"}}`},
 	{"PhysicalMachineChaos", "physicalmachineChaos", "stress-cpu", `{"action":"stress-cpu"}`},
 	{"PodChaos", "podChaos", "pod-kill", `{"action":"pod-kill"}`},
+	{"SecurityChaos", "securityChaos", "certificate-expiration", `{"action":"certificate-expiration","secretName":"tls"}`},
 	{"StressChaos", "stressChaos", "", `{"stressors":{"cpu":{"workers":1}}}`},
 	{"TimeChaos", "timeChaos", "", `{"timeOffset":"1s"}`},
 }

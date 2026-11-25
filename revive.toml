@@ -33,6 +33,7 @@ exclude = [
   "**/api/v1alpha1/gcpchaos_types.go",
   "**/api/v1alpha1/physical_machine_chaos_types.go",
   "**/api/v1alpha1/podhttpchaos_types.go",
+  "**/api/v1alpha1/securitychaos_types.go",
   "**/api/v1alpha1/statuscheck_types.go",
   "**/api/v1alpha1/timechaos_types.go",
   "**/api/v1alpha1/timechaos_webhook.go",

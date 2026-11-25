@@ -382,6 +382,10 @@ definitions:
         description: +optional
       schedule:
         type: string
+      securityChaos:
+        allOf:
+        - $ref: '#/definitions/github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosSpec'
+        description: +optional
       startingDeadlineSeconds:
         description: |-
           +optional
@@ -2916,6 +2920,10 @@ definitions:
         description: +optional
       schedule:
         type: string
+      securityChaos:
+        allOf:
+        - $ref: '#/definitions/github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosSpec'
+        description: +optional
       startingDeadlineSeconds:
         description: |-
           +optional
@@ -2965,6 +2973,7 @@ definitions:
     - NetworkChaos
     - PhysicalMachineChaos
     - PodChaos
+    - SecurityChaos
     - StressChaos
     - TimeChaos
     - Workflow
@@ -2982,9 +2991,94 @@ definitions:
     - ScheduleTypeNetworkChaos
     - ScheduleTypePhysicalMachineChaos
     - ScheduleTypePodChaos
+    - ScheduleTypeSecurityChaos
     - ScheduleTypeStressChaos
     - ScheduleTypeTimeChaos
     - ScheduleTypeWorkflow
+  github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosAction:
+    enum:
+    - certificate-expiration
+    - certificate-expired
+    - cert-expire
+    - key-rotation-failure
+    - key-rotation-failed
+    - certificate-corruption
+    - certificate-revocation
+    type: string
+    x-enum-varnames:
+    - CertificateExpirationAction
+    - CertificateExpiredAction
+    - CertExpireAction
+    - KeyRotationFailureAction
+    - KeyRotationFailedAction
+    - CertificateCorruptionAction
+    - CertificateRevocationAction
+  github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosKeyFailureMode:
+    enum:
+    - mismatched-key
+    - corrupted-key
+    - missing-key
+    type: string
+    x-enum-varnames:
+    - MismatchedKeyFailure
+    - CorruptedKeyFailure
+    - MissingKeyFailure
+  github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosSpec:
+    properties:
+      action:
+        allOf:
+        - $ref: '#/definitions/github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosAction'
+        description: |-
+          Action defines the security fault to inject.
+          +kubebuilder:validation:Enum=certificate-expiration;certificate-expired;cert-expire;key-rotation-failure;key-rotation-failed;certificate-corruption;certificate-revocation
+      certificateKey:
+        description: |-
+          CertificateKey is the key in the secret that contains the PEM certificate.
+          +optional
+        type: string
+      commonName:
+        description: |-
+          CommonName is used when a replacement certificate needs to be generated from scratch.
+          +optional
+        type: string
+      dnsNames:
+        description: |-
+          DNSNames are used when a replacement certificate needs to be generated from scratch.
+          +optional
+        items:
+          type: string
+        type: array
+      duration:
+        description: |-
+          Duration represents the duration of the chaos action.
+          +optional
+        type: string
+      keyRotationFailureMode:
+        allOf:
+        - $ref: '#/definitions/github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosKeyFailureMode'
+        description: |-
+          KeyRotationFailureMode defines how key-rotation-failure breaks the credential.
+          +optional
+          +kubebuilder:validation:Enum=mismatched-key;corrupted-key;missing-key
+      privateKeyKey:
+        description: |-
+          PrivateKeyKey is the key in the secret that contains the PEM private key.
+          +optional
+        type: string
+      remoteCluster:
+        description: |-
+          RemoteCluster represents the remote cluster where the chaos will be deployed.
+          +optional
+        type: string
+      secretName:
+        description: SecretName is the name of the target secret.
+        type: string
+      secretNamespace:
+        description: |-
+          SecretNamespace defaults to the namespace of the SecurityChaos.
+          +optional
+        type: string
+    type: object
   github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SelectorMode:
     enum:
     - one
@@ -3388,6 +3482,10 @@ definitions:
         description: |-
           Schedule describe the Schedule(describing scheduled chaos) to be injected with chaos nodes. Only used when Type is TypeSchedule.
           +optional
+      securityChaos:
+        allOf:
+        - $ref: '#/definitions/github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosSpec'
+        description: +optional
       statusCheck:
         allOf:
         - $ref: '#/definitions/github_com_chaos-mesh_chaos-mesh_api_v1alpha1.StatusCheckSpec'
@@ -3431,6 +3529,7 @@ definitions:
     - NetworkChaos
     - PhysicalMachineChaos
     - PodChaos
+    - SecurityChaos
     - StressChaos
     - TimeChaos
     type: string
@@ -3453,6 +3552,7 @@ definitions:
     - TypeNetworkChaos
     - TypePhysicalMachineChaos
     - TypePodChaos
+    - TypeSecurityChaos
     - TypeStressChaos
     - TypeTimeChaos
   github_com_chaos-mesh_chaos-mesh_api_v1alpha1.TimeChaosSpec:

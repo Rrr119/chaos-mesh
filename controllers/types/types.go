@@ -148,6 +148,14 @@ var ChaosObjects = fx.Supply(
 			Object: &v1alpha1.BlockChaos{},
 		},
 	},
+
+	fx.Annotated{
+		Group: "objs",
+		Target: Object{
+			Name:   "securitychaos",
+			Object: &v1alpha1.SecurityChaos{},
+		},
+	},
 )
 
 // WebhookObject only used for registration the

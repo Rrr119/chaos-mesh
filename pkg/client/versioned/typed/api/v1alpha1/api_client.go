@@ -39,6 +39,7 @@ type ApiV1alpha1Interface interface {
 	PodhttpchaosGetter
 	PodiochaosGetter
 	PodnetworkchaosGetter
+	SecuritychaosGetter
 	StresschaosGetter
 	TimechaosGetter
 }
@@ -98,6 +99,10 @@ func (c *ApiV1alpha1Client) Podiochaos(namespace string) PodIOChaosInterface {
 
 func (c *ApiV1alpha1Client) Podnetworkchaos(namespace string) PodNetworkChaosInterface {
 	return newPodnetworkchaos(c, namespace)
+}
+
+func (c *ApiV1alpha1Client) Securitychaos(namespace string) SecurityChaosInterface {
+	return newSecuritychaos(c, namespace)
 }
 
 func (c *ApiV1alpha1Client) Stresschaos(namespace string) StressChaosInterface {

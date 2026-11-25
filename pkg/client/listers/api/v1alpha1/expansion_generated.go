@@ -120,6 +120,14 @@ type PodNetworkChaosListerExpansion interface{}
 // PodNetworkChaosNamespaceLister.
 type PodNetworkChaosNamespaceListerExpansion interface{}
 
+// SecurityChaosListerExpansion allows custom methods to be added to
+// SecurityChaosLister.
+type SecurityChaosListerExpansion interface{}
+
+// SecurityChaosNamespaceListerExpansion allows custom methods to be added to
+// SecurityChaosNamespaceLister.
+type SecurityChaosNamespaceListerExpansion interface{}
+
 // StressChaosListerExpansion allows custom methods to be added to
 // StressChaosLister.
 type StressChaosListerExpansion interface{}

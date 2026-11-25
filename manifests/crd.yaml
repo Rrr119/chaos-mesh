@@ -8607,6 +8607,64 @@ spec:
                     && size(self.containerNames) > 0)
               schedule:
                 type: string
+              securityChaos:
+                description: SecurityChaosSpec defines the desired state of SecurityChaos.
+                properties:
+                  action:
+                    description: Action defines the security fault to inject.
+                    enum:
+                    - certificate-expiration
+                    - certificate-expired
+                    - cert-expire
+                    - key-rotation-failure
+                    - key-rotation-failed
+                    - certificate-corruption
+                    - certificate-revocation
+                    type: string
+                  certificateKey:
+                    description: CertificateKey is the key in the secret that contains
+                      the PEM certificate.
+                    type: string
+                  commonName:
+                    description: CommonName is used when a replacement certificate
+                      needs to be generated from scratch.
+                    type: string
+                  dnsNames:
+                    description: DNSNames are used when a replacement certificate
+                      needs to be generated from scratch.
+                    items:
+                      type: string
+                    type: array
+                  duration:
+                    description: Duration represents the duration of the chaos action.
+                    type: string
+                  keyRotationFailureMode:
+                    description: KeyRotationFailureMode defines how key-rotation-failure
+                      breaks the credential.
+                    enum:
+                    - mismatched-key
+                    - corrupted-key
+                    - missing-key
+                    type: string
+                  privateKeyKey:
+                    description: PrivateKeyKey is the key in the secret that contains
+                      the PEM private key.
+                    type: string
+                  remoteCluster:
+                    description: RemoteCluster represents the remote cluster where
+                      the chaos will be deployed.
+                    type: string
+                  secretName:
+                    description: SecretName is the name of the target secret.
+                    type: string
+                  secretNamespace:
+                    description: SecretNamespace defaults to the namespace of the
+                      SecurityChaos.
+                    type: string
+                required:
+                - action
+                - secretName
+                type: object
               startingDeadlineSeconds:
                 exclusiveMinimum: true
                 format: int64
@@ -15266,6 +15324,68 @@ spec:
                                   && size(self.containerNames) > 0)
                             schedule:
                               type: string
+                            securityChaos:
+                              description: SecurityChaosSpec defines the desired state
+                                of SecurityChaos.
+                              properties:
+                                action:
+                                  description: Action defines the security fault to
+                                    inject.
+                                  enum:
+                                  - certificate-expiration
+                                  - certificate-expired
+                                  - cert-expire
+                                  - key-rotation-failure
+                                  - key-rotation-failed
+                                  - certificate-corruption
+                                  - certificate-revocation
+                                  type: string
+                                certificateKey:
+                                  description: CertificateKey is the key in the secret
+                                    that contains the PEM certificate.
+                                  type: string
+                                commonName:
+                                  description: CommonName is used when a replacement
+                                    certificate needs to be generated from scratch.
+                                  type: string
+                                dnsNames:
+                                  description: DNSNames are used when a replacement
+                                    certificate needs to be generated from scratch.
+                                  items:
+                                    type: string
+                                  type: array
+                                duration:
+                                  description: Duration represents the duration of
+                                    the chaos action.
+                                  type: string
+                                keyRotationFailureMode:
+                                  description: KeyRotationFailureMode defines how
+                                    key-rotation-failure breaks the credential.
+                                  enum:
+                                  - mismatched-key
+                                  - corrupted-key
+                                  - missing-key
+                                  type: string
+                                privateKeyKey:
+                                  description: PrivateKeyKey is the key in the secret
+                                    that contains the PEM private key.
+                                  type: string
+                                remoteCluster:
+                                  description: RemoteCluster represents the remote
+                                    cluster where the chaos will be deployed.
+                                  type: string
+                                secretName:
+                                  description: SecretName is the name of the target
+                                    secret.
+                                  type: string
+                                secretNamespace:
+                                  description: SecretNamespace defaults to the namespace
+                                    of the SecurityChaos.
+                                  type: string
+                              required:
+                              - action
+                              - secretName
+                              type: object
                             startingDeadlineSeconds:
                               format: int64
                               minimum: 0
@@ -15649,6 +15769,66 @@ spec:
                           required:
                           - schedule
                           - type
+                          type: object
+                        securityChaos:
+                          description: SecurityChaosSpec defines the desired state
+                            of SecurityChaos.
+                          properties:
+                            action:
+                              description: Action defines the security fault to inject.
+                              enum:
+                              - certificate-expiration
+                              - certificate-expired
+                              - cert-expire
+                              - key-rotation-failure
+                              - key-rotation-failed
+                              - certificate-corruption
+                              - certificate-revocation
+                              type: string
+                            certificateKey:
+                              description: CertificateKey is the key in the secret
+                                that contains the PEM certificate.
+                              type: string
+                            commonName:
+                              description: CommonName is used when a replacement certificate
+                                needs to be generated from scratch.
+                              type: string
+                            dnsNames:
+                              description: DNSNames are used when a replacement certificate
+                                needs to be generated from scratch.
+                              items:
+                                type: string
+                              type: array
+                            duration:
+                              description: Duration represents the duration of the
+                                chaos action.
+                              type: string
+                            keyRotationFailureMode:
+                              description: KeyRotationFailureMode defines how key-rotation-failure
+                                breaks the credential.
+                              enum:
+                              - mismatched-key
+                              - corrupted-key
+                              - missing-key
+                              type: string
+                            privateKeyKey:
+                              description: PrivateKeyKey is the key in the secret
+                                that contains the PEM private key.
+                              type: string
+                            remoteCluster:
+                              description: RemoteCluster represents the remote cluster
+                                where the chaos will be deployed.
+                              type: string
+                            secretName:
+                              description: SecretName is the name of the target secret.
+                              type: string
+                            secretNamespace:
+                              description: SecretNamespace defaults to the namespace
+                                of the SecurityChaos.
+                              type: string
+                          required:
+                          - action
+                          - secretName
                           type: object
                         statusCheck:
                           description: StatusCheck describe the behavior of StatusCheck.
@@ -19921,6 +20101,198 @@ spec:
         type: object
     served: true
     storage: true
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.22.0
+  name: securitychaos.chaos-mesh.org
+spec:
+  group: chaos-mesh.org
+  names:
+    kind: SecurityChaos
+    listKind: SecurityChaosList
+    plural: securitychaos
+    singular: securitychaos
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.action
+      name: action
+      type: string
+    - jsonPath: .spec.duration
+      name: duration
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: SecurityChaos is the Schema for security credential fault injection.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SecurityChaosSpec defines the desired state of SecurityChaos.
+            properties:
+              action:
+                description: Action defines the security fault to inject.
+                enum:
+                - certificate-expiration
+                - certificate-expired
+                - cert-expire
+                - key-rotation-failure
+                - key-rotation-failed
+                - certificate-corruption
+                - certificate-revocation
+                type: string
+              certificateKey:
+                description: CertificateKey is the key in the secret that contains
+                  the PEM certificate.
+                type: string
+              commonName:
+                description: CommonName is used when a replacement certificate needs
+                  to be generated from scratch.
+                type: string
+              dnsNames:
+                description: DNSNames are used when a replacement certificate needs
+                  to be generated from scratch.
+                items:
+                  type: string
+                type: array
+              duration:
+                description: Duration represents the duration of the chaos action.
+                type: string
+              keyRotationFailureMode:
+                description: KeyRotationFailureMode defines how key-rotation-failure
+                  breaks the credential.
+                enum:
+                - mismatched-key
+                - corrupted-key
+                - missing-key
+                type: string
+              privateKeyKey:
+                description: PrivateKeyKey is the key in the secret that contains
+                  the PEM private key.
+                type: string
+              remoteCluster:
+                description: RemoteCluster represents the remote cluster where the
+                  chaos will be deployed.
+                type: string
+              secretName:
+                description: SecretName is the name of the target secret.
+                type: string
+              secretNamespace:
+                description: SecretNamespace defaults to the namespace of the SecurityChaos.
+                type: string
+            required:
+            - action
+            - secretName
+            type: object
+          status:
+            description: SecurityChaosStatus represents the observed state of SecurityChaos.
+            properties:
+              conditions:
+                description: Conditions represents the current global condition of
+                  the chaos
+                items:
+                  properties:
+                    reason:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              experiment:
+                description: Experiment records the last experiment state.
+                properties:
+                  containerRecords:
+                    description: Records are used to track the running status
+                    items:
+                      properties:
+                        events:
+                          description: Events are the essential details about the
+                            injections and recoveries
+                          items:
+                            properties:
+                              message:
+                                description: Message is the detail message, e.g. the
+                                  reason why we failed to inject the chaos
+                                type: string
+                              operation:
+                                description: Operation represents the operation we
+                                  are doing, when we crate this event
+                                type: string
+                              timestamp:
+                                description: Timestamp is time when we create this
+                                  event
+                                format: date-time
+                                type: string
+                              type:
+                                description: Type means the stage of this event
+                                type: string
+                            required:
+                            - operation
+                            - timestamp
+                            - type
+                            type: object
+                          type: array
+                        id:
+                          type: string
+                        injectedCount:
+                          description: InjectedCount is a counter to record the sum
+                            of successful injections
+                          type: integer
+                        phase:
+                          type: string
+                        recoveredCount:
+                          description: RecoveredCount is a counter to record the sum
+                            of successful recoveries
+                          type: integer
+                        selectorKey:
+                          type: string
+                      required:
+                      - id
+                      - injectedCount
+                      - phase
+                      - recoveredCount
+                      - selectorKey
+                      type: object
+                    type: array
+                  desiredPhase:
+                    enum:
+                    - Run
+                    - Stop
+                    type: string
+                type: object
+            required:
+            - experiment
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources: {}
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -26943,6 +27315,65 @@ spec:
                         && size(self.containerNames) > 0)
                   schedule:
                     type: string
+                  securityChaos:
+                    description: SecurityChaosSpec defines the desired state of SecurityChaos.
+                    properties:
+                      action:
+                        description: Action defines the security fault to inject.
+                        enum:
+                        - certificate-expiration
+                        - certificate-expired
+                        - cert-expire
+                        - key-rotation-failure
+                        - key-rotation-failed
+                        - certificate-corruption
+                        - certificate-revocation
+                        type: string
+                      certificateKey:
+                        description: CertificateKey is the key in the secret that
+                          contains the PEM certificate.
+                        type: string
+                      commonName:
+                        description: CommonName is used when a replacement certificate
+                          needs to be generated from scratch.
+                        type: string
+                      dnsNames:
+                        description: DNSNames are used when a replacement certificate
+                          needs to be generated from scratch.
+                        items:
+                          type: string
+                        type: array
+                      duration:
+                        description: Duration represents the duration of the chaos
+                          action.
+                        type: string
+                      keyRotationFailureMode:
+                        description: KeyRotationFailureMode defines how key-rotation-failure
+                          breaks the credential.
+                        enum:
+                        - mismatched-key
+                        - corrupted-key
+                        - missing-key
+                        type: string
+                      privateKeyKey:
+                        description: PrivateKeyKey is the key in the secret that contains
+                          the PEM private key.
+                        type: string
+                      remoteCluster:
+                        description: RemoteCluster represents the remote cluster where
+                          the chaos will be deployed.
+                        type: string
+                      secretName:
+                        description: SecretName is the name of the target secret.
+                        type: string
+                      secretNamespace:
+                        description: SecretNamespace defaults to the namespace of
+                          the SecurityChaos.
+                        type: string
+                    required:
+                    - action
+                    - secretName
+                    type: object
                   startingDeadlineSeconds:
                     exclusiveMinimum: true
                     format: int64
@@ -33680,6 +34111,68 @@ spec:
                                       && size(self.containerNames) > 0)
                                 schedule:
                                   type: string
+                                securityChaos:
+                                  description: SecurityChaosSpec defines the desired
+                                    state of SecurityChaos.
+                                  properties:
+                                    action:
+                                      description: Action defines the security fault
+                                        to inject.
+                                      enum:
+                                      - certificate-expiration
+                                      - certificate-expired
+                                      - cert-expire
+                                      - key-rotation-failure
+                                      - key-rotation-failed
+                                      - certificate-corruption
+                                      - certificate-revocation
+                                      type: string
+                                    certificateKey:
+                                      description: CertificateKey is the key in the
+                                        secret that contains the PEM certificate.
+                                      type: string
+                                    commonName:
+                                      description: CommonName is used when a replacement
+                                        certificate needs to be generated from scratch.
+                                      type: string
+                                    dnsNames:
+                                      description: DNSNames are used when a replacement
+                                        certificate needs to be generated from scratch.
+                                      items:
+                                        type: string
+                                      type: array
+                                    duration:
+                                      description: Duration represents the duration
+                                        of the chaos action.
+                                      type: string
+                                    keyRotationFailureMode:
+                                      description: KeyRotationFailureMode defines
+                                        how key-rotation-failure breaks the credential.
+                                      enum:
+                                      - mismatched-key
+                                      - corrupted-key
+                                      - missing-key
+                                      type: string
+                                    privateKeyKey:
+                                      description: PrivateKeyKey is the key in the
+                                        secret that contains the PEM private key.
+                                      type: string
+                                    remoteCluster:
+                                      description: RemoteCluster represents the remote
+                                        cluster where the chaos will be deployed.
+                                      type: string
+                                    secretName:
+                                      description: SecretName is the name of the target
+                                        secret.
+                                      type: string
+                                    secretNamespace:
+                                      description: SecretNamespace defaults to the
+                                        namespace of the SecurityChaos.
+                                      type: string
+                                  required:
+                                  - action
+                                  - secretName
+                                  type: object
                                 startingDeadlineSeconds:
                                   format: int64
                                   minimum: 0
@@ -34063,6 +34556,68 @@ spec:
                               required:
                               - schedule
                               - type
+                              type: object
+                            securityChaos:
+                              description: SecurityChaosSpec defines the desired state
+                                of SecurityChaos.
+                              properties:
+                                action:
+                                  description: Action defines the security fault to
+                                    inject.
+                                  enum:
+                                  - certificate-expiration
+                                  - certificate-expired
+                                  - cert-expire
+                                  - key-rotation-failure
+                                  - key-rotation-failed
+                                  - certificate-corruption
+                                  - certificate-revocation
+                                  type: string
+                                certificateKey:
+                                  description: CertificateKey is the key in the secret
+                                    that contains the PEM certificate.
+                                  type: string
+                                commonName:
+                                  description: CommonName is used when a replacement
+                                    certificate needs to be generated from scratch.
+                                  type: string
+                                dnsNames:
+                                  description: DNSNames are used when a replacement
+                                    certificate needs to be generated from scratch.
+                                  items:
+                                    type: string
+                                  type: array
+                                duration:
+                                  description: Duration represents the duration of
+                                    the chaos action.
+                                  type: string
+                                keyRotationFailureMode:
+                                  description: KeyRotationFailureMode defines how
+                                    key-rotation-failure breaks the credential.
+                                  enum:
+                                  - mismatched-key
+                                  - corrupted-key
+                                  - missing-key
+                                  type: string
+                                privateKeyKey:
+                                  description: PrivateKeyKey is the key in the secret
+                                    that contains the PEM private key.
+                                  type: string
+                                remoteCluster:
+                                  description: RemoteCluster represents the remote
+                                    cluster where the chaos will be deployed.
+                                  type: string
+                                secretName:
+                                  description: SecretName is the name of the target
+                                    secret.
+                                  type: string
+                                secretNamespace:
+                                  description: SecretNamespace defaults to the namespace
+                                    of the SecurityChaos.
+                                  type: string
+                              required:
+                              - action
+                              - secretName
                               type: object
                             statusCheck:
                               description: StatusCheck describe the behavior of StatusCheck.
@@ -38316,6 +38871,64 @@ spec:
                 required:
                 - schedule
                 - type
+                type: object
+              securityChaos:
+                description: SecurityChaosSpec defines the desired state of SecurityChaos.
+                properties:
+                  action:
+                    description: Action defines the security fault to inject.
+                    enum:
+                    - certificate-expiration
+                    - certificate-expired
+                    - cert-expire
+                    - key-rotation-failure
+                    - key-rotation-failed
+                    - certificate-corruption
+                    - certificate-revocation
+                    type: string
+                  certificateKey:
+                    description: CertificateKey is the key in the secret that contains
+                      the PEM certificate.
+                    type: string
+                  commonName:
+                    description: CommonName is used when a replacement certificate
+                      needs to be generated from scratch.
+                    type: string
+                  dnsNames:
+                    description: DNSNames are used when a replacement certificate
+                      needs to be generated from scratch.
+                    items:
+                      type: string
+                    type: array
+                  duration:
+                    description: Duration represents the duration of the chaos action.
+                    type: string
+                  keyRotationFailureMode:
+                    description: KeyRotationFailureMode defines how key-rotation-failure
+                      breaks the credential.
+                    enum:
+                    - mismatched-key
+                    - corrupted-key
+                    - missing-key
+                    type: string
+                  privateKeyKey:
+                    description: PrivateKeyKey is the key in the secret that contains
+                      the PEM private key.
+                    type: string
+                  remoteCluster:
+                    description: RemoteCluster represents the remote cluster where
+                      the chaos will be deployed.
+                    type: string
+                  secretName:
+                    description: SecretName is the name of the target secret.
+                    type: string
+                  secretNamespace:
+                    description: SecretNamespace defaults to the namespace of the
+                      SecurityChaos.
+                    type: string
+                required:
+                - action
+                - secretName
                 type: object
               startTime:
                 format: date-time
@@ -48842,6 +49455,66 @@ spec:
                               && size(self.containerNames) > 0)
                         schedule:
                           type: string
+                        securityChaos:
+                          description: SecurityChaosSpec defines the desired state
+                            of SecurityChaos.
+                          properties:
+                            action:
+                              description: Action defines the security fault to inject.
+                              enum:
+                              - certificate-expiration
+                              - certificate-expired
+                              - cert-expire
+                              - key-rotation-failure
+                              - key-rotation-failed
+                              - certificate-corruption
+                              - certificate-revocation
+                              type: string
+                            certificateKey:
+                              description: CertificateKey is the key in the secret
+                                that contains the PEM certificate.
+                              type: string
+                            commonName:
+                              description: CommonName is used when a replacement certificate
+                                needs to be generated from scratch.
+                              type: string
+                            dnsNames:
+                              description: DNSNames are used when a replacement certificate
+                                needs to be generated from scratch.
+                              items:
+                                type: string
+                              type: array
+                            duration:
+                              description: Duration represents the duration of the
+                                chaos action.
+                              type: string
+                            keyRotationFailureMode:
+                              description: KeyRotationFailureMode defines how key-rotation-failure
+                                breaks the credential.
+                              enum:
+                              - mismatched-key
+                              - corrupted-key
+                              - missing-key
+                              type: string
+                            privateKeyKey:
+                              description: PrivateKeyKey is the key in the secret
+                                that contains the PEM private key.
+                              type: string
+                            remoteCluster:
+                              description: RemoteCluster represents the remote cluster
+                                where the chaos will be deployed.
+                              type: string
+                            secretName:
+                              description: SecretName is the name of the target secret.
+                              type: string
+                            secretNamespace:
+                              description: SecretNamespace defaults to the namespace
+                                of the SecurityChaos.
+                              type: string
+                          required:
+                          - action
+                          - secretName
+                          type: object
                         startingDeadlineSeconds:
                           format: int64
                           minimum: 0
@@ -49225,6 +49898,66 @@ spec:
                       required:
                       - schedule
                       - type
+                      type: object
+                    securityChaos:
+                      description: SecurityChaosSpec defines the desired state of
+                        SecurityChaos.
+                      properties:
+                        action:
+                          description: Action defines the security fault to inject.
+                          enum:
+                          - certificate-expiration
+                          - certificate-expired
+                          - cert-expire
+                          - key-rotation-failure
+                          - key-rotation-failed
+                          - certificate-corruption
+                          - certificate-revocation
+                          type: string
+                        certificateKey:
+                          description: CertificateKey is the key in the secret that
+                            contains the PEM certificate.
+                          type: string
+                        commonName:
+                          description: CommonName is used when a replacement certificate
+                            needs to be generated from scratch.
+                          type: string
+                        dnsNames:
+                          description: DNSNames are used when a replacement certificate
+                            needs to be generated from scratch.
+                          items:
+                            type: string
+                          type: array
+                        duration:
+                          description: Duration represents the duration of the chaos
+                            action.
+                          type: string
+                        keyRotationFailureMode:
+                          description: KeyRotationFailureMode defines how key-rotation-failure
+                            breaks the credential.
+                          enum:
+                          - mismatched-key
+                          - corrupted-key
+                          - missing-key
+                          type: string
+                        privateKeyKey:
+                          description: PrivateKeyKey is the key in the secret that
+                            contains the PEM private key.
+                          type: string
+                        remoteCluster:
+                          description: RemoteCluster represents the remote cluster
+                            where the chaos will be deployed.
+                          type: string
+                        secretName:
+                          description: SecretName is the name of the target secret.
+                          type: string
+                        secretNamespace:
+                          description: SecretNamespace defaults to the namespace of
+                            the SecurityChaos.
+                          type: string
+                      required:
+                      - action
+                      - secretName
                       type: object
                     statusCheck:
                       description: StatusCheck describe the behavior of StatusCheck.

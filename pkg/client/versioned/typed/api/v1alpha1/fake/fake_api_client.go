@@ -78,6 +78,10 @@ func (c *FakeApiV1alpha1) Podnetworkchaos(namespace string) v1alpha1.PodNetworkC
 	return newFakePodnetworkchaos(c, namespace)
 }
 
+func (c *FakeApiV1alpha1) Securitychaos(namespace string) v1alpha1.SecurityChaosInterface {
+	return newFakeSecuritychaos(c, namespace)
+}
+
 func (c *FakeApiV1alpha1) Stresschaos(namespace string) v1alpha1.StressChaosInterface {
 	return newFakeStresschaos(c, namespace)
 }

@@ -2238,6 +2238,164 @@ func (in *RemoteCluster) Default(_ context.Context, obj runtime.Object) error {
 	return nil
 }
 
+const KindSecurityChaos = "SecurityChaos"
+
+// IsDeleted returns whether this resource has been deleted
+func (in *SecurityChaos) IsDeleted() bool {
+	return !in.DeletionTimestamp.IsZero()
+}
+
+// IsPaused returns whether this resource has been paused
+func (in *SecurityChaos) IsPaused() bool {
+	if in.Annotations == nil || in.Annotations[PauseAnnotationKey] != "true" {
+		return false
+	}
+	return true
+}
+
+// GetObjectMeta would return the ObjectMeta for chaos
+func (in *SecurityChaos) GetObjectMeta() *metav1.ObjectMeta {
+	return &in.ObjectMeta
+}
+
+// GetDuration would return the duration for chaos
+func (in *SecurityChaosSpec) GetDuration() (*time.Duration, error) {
+	if in.Duration == nil {
+		return nil, nil
+	}
+	duration, err := time.ParseDuration(string(*in.Duration))
+	if err != nil {
+		return nil, err
+	}
+	return &duration, nil
+}
+
+// GetStatus returns the status
+func (in *SecurityChaos) GetStatus() *ChaosStatus {
+	return &in.Status.ChaosStatus
+}
+
+// GetRemoteCluster returns the remoteCluster
+func (in *SecurityChaos) GetRemoteCluster() string {
+	return in.Spec.RemoteCluster
+}
+
+// GetSpecAndMetaString returns a string including the meta and spec field of this chaos object.
+func (in *SecurityChaos) GetSpecAndMetaString() (string, error) {
+	spec, err := json.Marshal(in.Spec)
+	if err != nil {
+		return "", err
+	}
+
+	meta := in.ObjectMeta.DeepCopy()
+	meta.SetResourceVersion("")
+	meta.SetGeneration(0)
+
+	return string(spec) + meta.String(), nil
+}
+
+// +kubebuilder:object:root=true
+
+// SecurityChaosList contains a list of SecurityChaos
+type SecurityChaosList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []SecurityChaos `json:"items"`
+}
+
+func (in *SecurityChaosList) DeepCopyList() GenericChaosList {
+	return in.DeepCopy()
+}
+
+// ListChaos returns a list of chaos
+func (in *SecurityChaosList) ListChaos() []GenericChaos {
+	var result []GenericChaos
+	for _, item := range in.Items {
+		item := item
+		result = append(result, &item)
+	}
+	return result
+}
+
+func (in *SecurityChaos) DurationExceeded(now time.Time) (bool, time.Duration, error) {
+	duration, err := in.Spec.GetDuration()
+	if err != nil {
+		return false, 0, err
+	}
+
+	if duration != nil {
+		stopTime := in.GetCreationTimestamp().Add(*duration)
+		if stopTime.Before(now) {
+			return true, 0, nil
+		}
+
+		return false, stopTime.Sub(now), nil
+	}
+
+	return false, 0, nil
+}
+
+func (in *SecurityChaos) IsOneShot() bool {
+	return false
+}
+
+var SecurityChaosWebhookLog = logf.Log.WithName("SecurityChaos-resource")
+
+func (in *SecurityChaos) ValidateCreate(ctx context.Context, obj runtime.Object) (admission.Warnings, error) {
+	typedObj, ok := obj.(*SecurityChaos)
+	if !ok {
+		return nil, errors.Errorf("expected type *SecurityChaos, got %T", obj)
+	}
+	SecurityChaosWebhookLog.Info("validate create", "name", typedObj.GetName())
+
+	return typedObj.Validate()
+}
+
+// ValidateUpdate implements webhook.CustomValidator so a webhook will be registered for the type
+func (in *SecurityChaos) ValidateUpdate(ctx context.Context, oldObj, newObj runtime.Object) (admission.Warnings, error) {
+	typedOldObj, ok := oldObj.(*SecurityChaos)
+	if !ok {
+		return nil, errors.Errorf("expected type *SecurityChaos, got %T", oldObj)
+	}
+
+	typedNewObj, ok := newObj.(*SecurityChaos)
+	if !ok {
+		return nil, errors.Errorf("expected type *SecurityChaos, got %T", newObj)
+	}
+
+	SecurityChaosWebhookLog.Info("validate update", "name", typedOldObj.GetName())
+	if !reflect.DeepEqual(typedOldObj.Spec, typedNewObj.Spec) {
+		return nil, ErrCanNotUpdateChaos
+	}
+	return typedNewObj.Validate()
+}
+
+// ValidateDelete implements webhook.CustomValidator so a webhook will be registered for the type
+func (in *SecurityChaos) ValidateDelete(_ context.Context, obj runtime.Object) (admission.Warnings, error) {
+	typedObj, ok := obj.(*SecurityChaos)
+	if !ok {
+		return nil, errors.Errorf("expected type *SecurityChaos, got %T", obj)
+	}
+
+	SecurityChaosWebhookLog.Info("validate delete", "name", typedObj.GetName())
+
+	return nil, nil
+}
+
+var _ webhook.CustomValidator = &SecurityChaos{}
+
+func (in *SecurityChaos) Validate() ([]string, error) {
+	errs := gw.Validate(in)
+	return nil, gw.Aggregate(errs)
+}
+
+var _ webhook.CustomDefaulter = &SecurityChaos{}
+
+func (in *SecurityChaos) Default(_ context.Context, obj runtime.Object) error {
+	gw.Default(obj)
+	return nil
+}
+
 const KindStatusCheck = "StatusCheck"
 
 var StatusCheckWebhookLog = logf.Log.WithName("StatusCheck-resource")
@@ -2697,6 +2855,12 @@ func init() {
 
 	SchemeBuilder.Register(&RemoteCluster{}, &RemoteClusterList{})
 
+	SchemeBuilder.Register(&SecurityChaos{}, &SecurityChaosList{})
+	all.register(KindSecurityChaos, &ChaosKind{
+		chaos: &SecurityChaos{},
+		list:  &SecurityChaosList{},
+	})
+
 	SchemeBuilder.Register(&StatusCheck{}, &StatusCheckList{})
 
 	SchemeBuilder.Register(&StressChaos{}, &StressChaosList{})
@@ -2770,6 +2934,11 @@ func init() {
 	allScheduleItem.register(KindPodChaos, &ChaosKind{
 		chaos: &PodChaos{},
 		list:  &PodChaosList{},
+	})
+
+	allScheduleItem.register(KindSecurityChaos, &ChaosKind{
+		chaos: &SecurityChaos{},
+		list:  &SecurityChaosList{},
 	})
 
 	allScheduleItem.register(KindStressChaos, &ChaosKind{

@@ -56,6 +56,8 @@ import {
   V1alpha1PodChaosAction,
   V1alpha1PodHttpChaosTarget,
   V1alpha1ScheduleTemplateType,
+  V1alpha1SecurityChaosAction,
+  V1alpha1SecurityChaosKeyFailureMode,
   V1alpha1SelectorMode,
   V1alpha1StatusCheckMode,
   V1alpha1StatusCheckType,
@@ -1552,6 +1554,22 @@ export const getPostSchedulesResponseMock = (
       },
     },
     schedule: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    securityChaos: {
+      ...{
+        action: faker.helpers.arrayElement(Object.values(V1alpha1SecurityChaosAction)),
+        certificateKey: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        commonName: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        dnsNames: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+          faker.string.alpha({ length: { min: 10, max: 20 } }),
+        ),
+        duration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        keyRotationFailureMode: faker.helpers.arrayElement(Object.values(V1alpha1SecurityChaosKeyFailureMode)),
+        privateKeyKey: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        remoteCluster: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        secretName: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        secretNamespace: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      },
+    },
     startingDeadlineSeconds: faker.number.int(),
     stressChaos: {
       ...{
@@ -3894,6 +3912,24 @@ export const getPostSchedulesResponseMock = (
                 },
               },
               schedule: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              securityChaos: {
+                ...{
+                  action: faker.helpers.arrayElement(Object.values(V1alpha1SecurityChaosAction)),
+                  certificateKey: faker.string.alpha({ length: { min: 10, max: 20 } }),
+                  commonName: faker.string.alpha({ length: { min: 10, max: 20 } }),
+                  dnsNames: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+                    faker.string.alpha({ length: { min: 10, max: 20 } }),
+                  ),
+                  duration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+                  keyRotationFailureMode: faker.helpers.arrayElement(
+                    Object.values(V1alpha1SecurityChaosKeyFailureMode),
+                  ),
+                  privateKeyKey: faker.string.alpha({ length: { min: 10, max: 20 } }),
+                  remoteCluster: faker.string.alpha({ length: { min: 10, max: 20 } }),
+                  secretName: faker.string.alpha({ length: { min: 10, max: 20 } }),
+                  secretNamespace: faker.string.alpha({ length: { min: 10, max: 20 } }),
+                },
+              },
               startingDeadlineSeconds: faker.number.int(),
               stressChaos: {
                 ...{
@@ -4031,6 +4067,22 @@ export const getPostSchedulesResponseMock = (
                 },
               },
               type: faker.helpers.arrayElement(Object.values(V1alpha1ScheduleTemplateType)),
+            },
+          },
+          securityChaos: {
+            ...{
+              action: faker.helpers.arrayElement(Object.values(V1alpha1SecurityChaosAction)),
+              certificateKey: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              commonName: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              dnsNames: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+                faker.string.alpha({ length: { min: 10, max: 20 } }),
+              ),
+              duration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              keyRotationFailureMode: faker.helpers.arrayElement(Object.values(V1alpha1SecurityChaosKeyFailureMode)),
+              privateKeyKey: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              remoteCluster: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              secretName: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              secretNamespace: faker.string.alpha({ length: { min: 10, max: 20 } }),
             },
           },
           statusCheck: {
@@ -7763,6 +7815,22 @@ export const getPostWorkflowsRenderTaskHttpResponseMock = (
         },
       },
       schedule: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      securityChaos: {
+        ...{
+          action: faker.helpers.arrayElement(Object.values(V1alpha1SecurityChaosAction)),
+          certificateKey: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          commonName: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          dnsNames: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+            faker.string.alpha({ length: { min: 10, max: 20 } }),
+          ),
+          duration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          keyRotationFailureMode: faker.helpers.arrayElement(Object.values(V1alpha1SecurityChaosKeyFailureMode)),
+          privateKeyKey: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          remoteCluster: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          secretName: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          secretNamespace: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        },
+      },
       startingDeadlineSeconds: faker.number.int(),
       stressChaos: {
         ...{
@@ -7896,6 +7964,22 @@ export const getPostWorkflowsRenderTaskHttpResponseMock = (
         },
       },
       type: faker.helpers.arrayElement(Object.values(V1alpha1ScheduleTemplateType)),
+    },
+  },
+  securityChaos: {
+    ...{
+      action: faker.helpers.arrayElement(Object.values(V1alpha1SecurityChaosAction)),
+      certificateKey: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      commonName: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      dnsNames: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() =>
+        faker.string.alpha({ length: { min: 10, max: 20 } }),
+      ),
+      duration: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      keyRotationFailureMode: faker.helpers.arrayElement(Object.values(V1alpha1SecurityChaosKeyFailureMode)),
+      privateKeyKey: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      remoteCluster: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      secretName: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      secretNamespace: faker.string.alpha({ length: { min: 10, max: 20 } }),
     },
   },
   statusCheck: {

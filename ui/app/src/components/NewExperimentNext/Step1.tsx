@@ -119,6 +119,7 @@ const Step1 = () => {
   if (!config?.dns_server_create) {
     typesDataEntries = typesDataEntries.filter((d) => d[0] !== 'DNSChaos')
   }
+  typesDataEntries = typesDataEntries.filter(([key]) => key !== 'SecurityChaos')
 
   const handleSelectTarget = (key: Kind) => () => {
     setKindAction([key, ''])

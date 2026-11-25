@@ -3009,6 +3009,14 @@ const docTemplate = `{
                 "schedule": {
                     "type": "string"
                 },
+                "securityChaos": {
+                    "description": "+optional",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosSpec"
+                        }
+                    ]
+                },
                 "startingDeadlineSeconds": {
                     "description": "+optional\n+nullable\n+kubebuilder:validation:Minimum=0",
                     "type": "integer"
@@ -5848,6 +5856,14 @@ const docTemplate = `{
                 "schedule": {
                     "type": "string"
                 },
+                "securityChaos": {
+                    "description": "+optional",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosSpec"
+                        }
+                    ]
+                },
                 "startingDeadlineSeconds": {
                     "description": "+optional\n+nullable\n+kubebuilder:validation:Minimum=0\n+kubebuilder:validation:ExclusiveMinimum=true",
                     "type": "integer"
@@ -5912,6 +5928,7 @@ const docTemplate = `{
                 "NetworkChaos",
                 "PhysicalMachineChaos",
                 "PodChaos",
+                "SecurityChaos",
                 "StressChaos",
                 "TimeChaos",
                 "Workflow"
@@ -5929,10 +5946,101 @@ const docTemplate = `{
                 "ScheduleTypeNetworkChaos",
                 "ScheduleTypePhysicalMachineChaos",
                 "ScheduleTypePodChaos",
+                "ScheduleTypeSecurityChaos",
                 "ScheduleTypeStressChaos",
                 "ScheduleTypeTimeChaos",
                 "ScheduleTypeWorkflow"
             ]
+        },
+        "github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosAction": {
+            "type": "string",
+            "enum": [
+                "certificate-expiration",
+                "certificate-expired",
+                "cert-expire",
+                "key-rotation-failure",
+                "key-rotation-failed",
+                "certificate-corruption",
+                "certificate-revocation"
+            ],
+            "x-enum-varnames": [
+                "CertificateExpirationAction",
+                "CertificateExpiredAction",
+                "CertExpireAction",
+                "KeyRotationFailureAction",
+                "KeyRotationFailedAction",
+                "CertificateCorruptionAction",
+                "CertificateRevocationAction"
+            ]
+        },
+        "github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosKeyFailureMode": {
+            "type": "string",
+            "enum": [
+                "mismatched-key",
+                "corrupted-key",
+                "missing-key"
+            ],
+            "x-enum-varnames": [
+                "MismatchedKeyFailure",
+                "CorruptedKeyFailure",
+                "MissingKeyFailure"
+            ]
+        },
+        "github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosSpec": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "description": "Action defines the security fault to inject.\n+kubebuilder:validation:Enum=certificate-expiration;certificate-expired;cert-expire;key-rotation-failure;key-rotation-failed;certificate-corruption;certificate-revocation",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosAction"
+                        }
+                    ]
+                },
+                "certificateKey": {
+                    "description": "CertificateKey is the key in the secret that contains the PEM certificate.\n+optional",
+                    "type": "string"
+                },
+                "commonName": {
+                    "description": "CommonName is used when a replacement certificate needs to be generated from scratch.\n+optional",
+                    "type": "string"
+                },
+                "dnsNames": {
+                    "description": "DNSNames are used when a replacement certificate needs to be generated from scratch.\n+optional",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "duration": {
+                    "description": "Duration represents the duration of the chaos action.\n+optional",
+                    "type": "string"
+                },
+                "keyRotationFailureMode": {
+                    "description": "KeyRotationFailureMode defines how key-rotation-failure breaks the credential.\n+optional\n+kubebuilder:validation:Enum=mismatched-key;corrupted-key;missing-key",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosKeyFailureMode"
+                        }
+                    ]
+                },
+                "privateKeyKey": {
+                    "description": "PrivateKeyKey is the key in the secret that contains the PEM private key.\n+optional",
+                    "type": "string"
+                },
+                "remoteCluster": {
+                    "description": "RemoteCluster represents the remote cluster where the chaos will be deployed.\n+optional",
+                    "type": "string"
+                },
+                "secretName": {
+                    "description": "SecretName is the name of the target secret.",
+                    "type": "string"
+                },
+                "secretNamespace": {
+                    "description": "SecretNamespace defaults to the namespace of the SecurityChaos.\n+optional",
+                    "type": "string"
+                }
+            }
         },
         "github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SelectorMode": {
             "type": "string",
@@ -6362,6 +6470,14 @@ const docTemplate = `{
                         }
                     ]
                 },
+                "securityChaos": {
+                    "description": "+optional",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/github_com_chaos-mesh_chaos-mesh_api_v1alpha1.SecurityChaosSpec"
+                        }
+                    ]
+                },
                 "statusCheck": {
                     "description": "StatusCheck describe the behavior of StatusCheck. Only used when Type is TypeStatusCheck.\n+optional",
                     "allOf": [
@@ -6420,6 +6536,7 @@ const docTemplate = `{
                 "NetworkChaos",
                 "PhysicalMachineChaos",
                 "PodChaos",
+                "SecurityChaos",
                 "StressChaos",
                 "TimeChaos"
             ],
@@ -6442,6 +6559,7 @@ const docTemplate = `{
                 "TypeNetworkChaos",
                 "TypePhysicalMachineChaos",
                 "TypePodChaos",
+                "TypeSecurityChaos",
                 "TypeStressChaos",
                 "TypeTimeChaos"
             ]

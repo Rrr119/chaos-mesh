@@ -2333,6 +2333,78 @@ export interface V1alpha1PodChaosSpec {
   value?: string
 }
 
+export type V1alpha1SecurityChaosAction = (typeof V1alpha1SecurityChaosAction)[keyof typeof V1alpha1SecurityChaosAction]
+
+export const V1alpha1SecurityChaosAction = {
+  CertificateExpirationAction: 'certificate-expiration',
+  CertificateExpiredAction: 'certificate-expired',
+  CertExpireAction: 'cert-expire',
+  KeyRotationFailureAction: 'key-rotation-failure',
+  KeyRotationFailedAction: 'key-rotation-failed',
+  CertificateCorruptionAction: 'certificate-corruption',
+  CertificateRevocationAction: 'certificate-revocation',
+} as const
+
+export type V1alpha1SecurityChaosKeyFailureMode =
+  (typeof V1alpha1SecurityChaosKeyFailureMode)[keyof typeof V1alpha1SecurityChaosKeyFailureMode]
+
+export const V1alpha1SecurityChaosKeyFailureMode = {
+  MismatchedKeyFailure: 'mismatched-key',
+  CorruptedKeyFailure: 'corrupted-key',
+  MissingKeyFailure: 'missing-key',
+} as const
+
+export interface V1alpha1SecurityChaosSpec {
+  /**
+   * Action defines the security fault to inject.
+   * +kubebuilder:validation:Enum=certificate-expiration;certificate-expired;cert-expire;key-rotation-failure;key-rotation-failed;certificate-corruption;certificate-revocation
+   */
+  action?: V1alpha1SecurityChaosAction
+  /**
+   * CertificateKey is the key in the secret that contains the PEM certificate.
+   * +optional
+   */
+  certificateKey?: string
+  /**
+   * CommonName is used when a replacement certificate needs to be generated from scratch.
+   * +optional
+   */
+  commonName?: string
+  /**
+   * DNSNames are used when a replacement certificate needs to be generated from scratch.
+   * +optional
+   */
+  dnsNames?: string[]
+  /**
+   * Duration represents the duration of the chaos action.
+   * +optional
+   */
+  duration?: string
+  /**
+   * KeyRotationFailureMode defines how key-rotation-failure breaks the credential.
+   * +optional
+   * +kubebuilder:validation:Enum=mismatched-key;corrupted-key;missing-key
+   */
+  keyRotationFailureMode?: V1alpha1SecurityChaosKeyFailureMode
+  /**
+   * PrivateKeyKey is the key in the secret that contains the PEM private key.
+   * +optional
+   */
+  privateKeyKey?: string
+  /**
+   * RemoteCluster represents the remote cluster where the chaos will be deployed.
+   * +optional
+   */
+  remoteCluster?: string
+  /** SecretName is the name of the target secret. */
+  secretName?: string
+  /**
+   * SecretNamespace defaults to the namespace of the SecurityChaos.
+   * +optional
+   */
+  secretNamespace?: string
+}
+
 export interface V1alpha1MemoryStressor {
   /**
    * OOMScoreAdj adjusts how likely the Linux out-of-memory (OOM) killer is to select the memStress process.
@@ -2500,6 +2572,7 @@ export const V1alpha1ScheduleTemplateType = {
   ScheduleTypeNetworkChaos: 'NetworkChaos',
   ScheduleTypePhysicalMachineChaos: 'PhysicalMachineChaos',
   ScheduleTypePodChaos: 'PodChaos',
+  ScheduleTypeSecurityChaos: 'SecurityChaos',
   ScheduleTypeStressChaos: 'StressChaos',
   ScheduleTypeTimeChaos: 'TimeChaos',
   ScheduleTypeWorkflow: 'Workflow',
@@ -2541,6 +2614,8 @@ export interface V1alpha1ChaosOnlyScheduleSpec {
   /** +optional */
   podChaos?: V1alpha1PodChaosSpec
   schedule?: string
+  /** +optional */
+  securityChaos?: V1alpha1SecurityChaosSpec
   /**
    * +optional
    * +nullable
@@ -6323,6 +6398,7 @@ export const V1alpha1TemplateType = {
   TypeNetworkChaos: 'NetworkChaos',
   TypePhysicalMachineChaos: 'PhysicalMachineChaos',
   TypePodChaos: 'PodChaos',
+  TypeSecurityChaos: 'SecurityChaos',
   TypeStressChaos: 'StressChaos',
   TypeTimeChaos: 'TimeChaos',
 } as const
@@ -6376,6 +6452,8 @@ export interface V1alpha1Template {
    * +optional
    */
   schedule?: V1alpha1ChaosOnlyScheduleSpec
+  /** +optional */
+  securityChaos?: V1alpha1SecurityChaosSpec
   /**
    * StatusCheck describe the behavior of StatusCheck. Only used when Type is TypeStatusCheck.
    * +optional
@@ -6435,6 +6513,8 @@ export interface V1alpha1ScheduleSpec {
   /** +optional */
   podChaos?: V1alpha1PodChaosSpec
   schedule?: string
+  /** +optional */
+  securityChaos?: V1alpha1SecurityChaosSpec
   /**
    * +optional
    * +nullable

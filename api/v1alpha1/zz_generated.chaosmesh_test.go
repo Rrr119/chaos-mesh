@@ -781,6 +781,69 @@ func TestPodChaosListChaos(t *testing.T) {
 	chaos.ListChaos()
 }
 
+func TestSecurityChaosIsDeleted(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	chaos := &SecurityChaos{}
+	err := faker.FakeData(chaos)
+
+	g.Expect(err).To(BeNil())
+
+	chaos.IsDeleted()
+}
+
+func TestSecurityChaosIsIsPaused(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	chaos := &SecurityChaos{}
+	err := faker.FakeData(chaos)
+
+	g.Expect(err).To(BeNil())
+
+	chaos.IsPaused()
+}
+
+func TestSecurityChaosGetDuration(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	chaos := &SecurityChaos{}
+	err := faker.FakeData(chaos)
+
+	g.Expect(err).To(BeNil())
+
+	chaos.Spec.GetDuration()
+}
+
+func TestSecurityChaosGetStatus(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	chaos := &SecurityChaos{}
+	err := faker.FakeData(chaos)
+
+	g.Expect(err).To(BeNil())
+
+	chaos.GetStatus()
+}
+
+func TestSecurityChaosGetSpecAndMetaString(t *testing.T) {
+	g := NewGomegaWithT(t)
+	chaos := &SecurityChaos{}
+	err := faker.FakeData(chaos)
+	g.Expect(err).To(BeNil())
+	chaos.GetSpecAndMetaString()
+}
+
+func TestSecurityChaosListChaos(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	chaos := &SecurityChaosList{}
+	err := faker.FakeData(chaos)
+
+	g.Expect(err).To(BeNil())
+
+	chaos.ListChaos()
+}
+
 func TestStressChaosIsDeleted(t *testing.T) {
 	g := NewGomegaWithT(t)
 

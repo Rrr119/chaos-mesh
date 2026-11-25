@@ -15,6 +15,7 @@
  *
  */
 import LinearScaleIcon from '@mui/icons-material/LinearScale'
+import LockIcon from '@mui/icons-material/Lock'
 import TimelapseIcon from '@mui/icons-material/Timelapse'
 import { SvgIcon } from '@mui/material'
 
@@ -81,6 +82,9 @@ export function iconByKind(kind: string, size: 'small' | 'inherit' | 'medium' | 
       break
     case 'PodChaos':
       icon = <PodLifecycleIcon />
+      break
+    case 'SecurityChaos':
+      icon = <LockIcon />
       break
     case 'ProcessChaos':
       icon = <ProcessIcon />
